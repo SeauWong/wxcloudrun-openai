@@ -56,21 +56,28 @@ public class DallEServiceImpl implements DallEService {
         }
 
 
-        executorService.submit(() -> {
-                    CallRecord callRecord = rs.orElseGet(() -> callRecordService.save(toCallRecord(param)));
-
-                    Images images = dallEApiWrapper.generations(param.getContent(), DallEConstants.BASE64_FORMAT);
-
-                    String key = cosUtil.upload(images.getB64Json());
-
-                    CallRecordExt extInfo = callRecord.getExtInfo();
-                    extInfo.setUrl(cosUtil.getPicUrl(key));
-                    extInfo.setDallESuccess(null != key);
-                    callRecordService.save(callRecord);
-                }
-        );
+        executorService.submit(() -> asyncHandle(param, rs));
 
         return "正在处理...10秒后重新发送获取";
+    }
+
+    private void asyncHandle(MsgParam param, Optional<CallRecord> rs) {
+        try {
+            CallRecord callRecord = rs.orElseGet(() -> callRecordService.save(toCallRecord(param)));
+
+            Images images = dallEApiWrapper.generations(param.getContent(), DallEConstants.BASE64_FORMAT);
+
+            String key = cosUtil.upload(images.getB64Json());
+
+            CallRecordExt extInfo = callRecord.getExtInfo();
+            extInfo.setUrl(cosUtil.getPicUrl(key));
+            extInfo.setDallESuccess(null != key);
+            callRecordService.save(callRecord);
+
+        } catch (Exception e) {
+            log.error("DallEServiceImpl_asyncHandle_fail", e);
+        }
+
     }
 
     private CallRecord toCallRecord(MsgParam param) {
