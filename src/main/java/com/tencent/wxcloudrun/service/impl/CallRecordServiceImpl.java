@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -50,6 +51,10 @@ public class CallRecordServiceImpl implements CallRecordService {
         if(null == callRecord){
             return null;
         }
+        if(null == callRecord.getId()){
+            callRecord.setGmtCreated(new Date());
+        }
+        callRecord.setGmtModified(new Date());
         CallRecordDO callRecordDO = callRecordRepository.save(CallRecordConvertor.toDO(callRecord));
         log.info("callRecordRepository.save.res={}", callRecordDO);
         return CallRecordConvertor.toDto(callRecordDO);

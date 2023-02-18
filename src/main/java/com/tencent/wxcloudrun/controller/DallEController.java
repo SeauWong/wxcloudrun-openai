@@ -3,6 +3,7 @@ package com.tencent.wxcloudrun.controller;
 import com.alibaba.fastjson.JSON;
 import com.tencent.wxcloudrun.param.MsgParam;
 import com.tencent.wxcloudrun.service.DallEService;
+import com.tencent.wxcloudrun.service.convertor.MsgConvertor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,18 +35,10 @@ public class DallEController {
 
         try {
             String resMsg = dallEService.handleMsg(param);
-            MsgParam result = new MsgParam();
-            result.setContent(resMsg);
-            result.setCreateTime(System.currentTimeMillis());
-            result.setFromUserName(param.getToUserName());
-            result.setToUserName(param.getFromUserName());
-            result.setMsgType("text");
-            return JSON.toJSONString(result);
+            return MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), resMsg);
         } catch (Exception e) {
             log.error("dallEService.handleMsg.fail", e);
-            return null;
+            return MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), "系统繁忙, 请稍后重试");
         }
-
     }
-
 }
