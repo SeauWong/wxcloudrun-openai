@@ -2,6 +2,7 @@ package com.tencent.wxcloudrun.wrapper.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -43,10 +46,27 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
             httpPost.setEntity(formEntity);
             HttpResponse response = httpClient.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
-            return EntityUtils.toString(responseEntity);
-        }catch (Exception e){
+            Response res = JSON.parseObject(EntityUtils.toString(responseEntity), Response.class);
+            return Optional.ofNullable(res)
+                    .map(Response::getData)
+                    .map(r -> r.get(0))
+                    .map(Url::getUrl)
+                    .orElse(null);
+        } catch (Exception e) {
             log.error("DallEApiWrapperImpl_generations_fail", e);
             return null;
         }
+    }
+
+    @Data
+    public static class Response {
+        private Long created;
+
+        private List<Url> data;
+    }
+
+    @Data
+    public static class Url {
+        private String url;
     }
 }

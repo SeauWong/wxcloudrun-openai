@@ -20,10 +20,10 @@ public class DallEController {
     private DallEService dallEService;
 
     @PostMapping("/handleMsgs")
-    public MsgParam handleMsg(@RequestBody String body){
+    public String handleMsg(@RequestBody String body) {
         log.info("body={}", body);
         MsgParam param = JSON.parseObject(body, MsgParam.class);
-        if(!param.getContent().startsWith("作画")){
+        if (!param.getContent().startsWith("作画")) {
             return null;
         }
         if (!"text".equals(param.getMsgType())) {
@@ -38,13 +38,12 @@ public class DallEController {
             result.setFromUserName(param.getToUserName());
             result.setToUserName(param.getFromUserName());
             result.setMsgType("text");
-            return result;
-        }catch (Exception e){
+            return JSON.toJSONString(result);
+        } catch (Exception e) {
             log.error("dallEService.handleMsg.fail", e);
             return null;
         }
 
     }
-
 
 }

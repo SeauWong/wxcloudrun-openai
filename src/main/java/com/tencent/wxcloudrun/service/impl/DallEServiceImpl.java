@@ -37,19 +37,19 @@ public class DallEServiceImpl implements DallEService {
         String url = rs.map(CallRecord::getExtInfo)
                 .map(CallRecordExt::getUrl)
                 .orElse(null);
-        if(StringUtils.isNotBlank(url)){
+        if (StringUtils.isNotBlank(url)) {
             return url;
         }
 
         CallRecord callRecord = callRecordService.save(toCallRecord(param));
 
         executorService.submit(() -> {
-            String picUrl = dallEApiWrapper.generations(param.getContent());
-            if (StringUtils.isNotBlank(picUrl)) {
-                callRecord.getExtInfo().setUrl(picUrl);
-                callRecordService.save(callRecord);
-            }
-        });
+                    String picUrl = dallEApiWrapper.generations(param.getContent());
+                    picUrl = Optional.ofNullable(picUrl).orElse("系统繁忙, 请稍后重试");
+                    callRecord.getExtInfo().setUrl(picUrl);
+                    callRecordService.save(callRecord);
+                }
+        );
 
         return "已下发, 请稍后复制消息重新发送获取";
     }
