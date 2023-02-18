@@ -1,6 +1,8 @@
 package com.tencent.wxcloudrun.wrapper;
 
+import com.tencent.wxcloudrun.wrapper.model.Images;
+
 public interface DallEApiWrapper {
 
-    String generations(String prompt);
+    Images generations(String prompt, String format);
 }

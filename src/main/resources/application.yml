@@ -18,3 +18,9 @@ mybatis:
 
 openai:
   app-key: ${OPENAI_APPKEY}
+
+cos:
+  secret-id: ${secretId}
+  secret-key: ${secretKey}
+  region: ${COS_REGION}
+  bucket: ${COS_BUCKET}

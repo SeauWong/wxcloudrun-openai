@@ -1,7 +1,11 @@
 package com.tencent.wxcloudrun.wrapper.impl;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson2.JSON;
+import com.tencent.wxcloudrun.constants.DallEConstants;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
+import com.tencent.wxcloudrun.wrapper.model.Images;
+import com.tencent.wxcloudrun.wrapper.model.Response;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -30,7 +34,7 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
     private String appKey;
 
     @Override
-    public String generations(String prompt) {
+    public Images generations(String prompt, String format) {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(API_URL);
@@ -40,33 +44,21 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
         Map<String, String> params = new HashMap<>();
         params.put("prompt", prompt);
         params.put("size", "512x512");
-        params.put("response_format", "url");
+        params.put("response_format", format);
         try {
             StringEntity formEntity = new StringEntity(JSON.toJSONString(params));
             httpPost.setEntity(formEntity);
             HttpResponse response = httpClient.execute(httpPost);
             HttpEntity responseEntity = response.getEntity();
             Response res = JSON.parseObject(EntityUtils.toString(responseEntity), Response.class);
+//            log.info("DallEApiWrapperImpl_generations_res={}", res);
             return Optional.ofNullable(res)
                     .map(Response::getData)
                     .map(r -> r.get(0))
-                    .map(Url::getUrl)
                     .orElse(null);
         } catch (Exception e) {
             log.error("DallEApiWrapperImpl_generations_fail", e);
             return null;
         }
-    }
-
-    @Data
-    public static class Response {
-        private Long created;
-
-        private List<Url> data;
-    }
-
-    @Data
-    public static class Url {
-        private String url;
     }
 }
