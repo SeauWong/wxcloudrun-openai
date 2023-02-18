@@ -1,6 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
-import com.tencent.wxcloudrun.dao.CallRecordRepository;
+import com.tencent.wxcloudrun.repository.CallRecordRepository;
 import com.tencent.wxcloudrun.model.CallRecord;
 import com.tencent.wxcloudrun.model.CallRecordDO;
 import com.tencent.wxcloudrun.service.CallRecordService;

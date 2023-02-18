@@ -1,4 +1,4 @@
-package com.tencent.wxcloudrun.dao;
+package com.tencent.wxcloudrun.repository;
 
 import com.tencent.wxcloudrun.model.CallRecordDO;
 import org.springframework.data.jpa.repository.JpaRepository;
