@@ -35,7 +35,9 @@ public class DallEController {
 
         try {
             String resMsg = dallEService.handleMsg(param);
-            return MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), resMsg);
+            String rs = MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), resMsg);
+            log.info("controller response={}", rs);
+            return rs;
         } catch (Exception e) {
             log.error("dallEService.handleMsg.fail", e);
             return MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), "系统繁忙, 请稍后重试");
