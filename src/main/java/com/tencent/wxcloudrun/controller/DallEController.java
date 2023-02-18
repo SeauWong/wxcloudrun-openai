@@ -1,11 +1,12 @@
 package com.tencent.wxcloudrun.controller;
 
 import com.tencent.wxcloudrun.config.ApiResponse;
-import com.tencent.wxcloudrun.service.DallEApiWrapper;
+import com.tencent.wxcloudrun.param.MsgParam;
+import com.tencent.wxcloudrun.service.DallEService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -16,13 +17,13 @@ import javax.annotation.Resource;
 public class DallEController {
 
     @Resource
-    private DallEApiWrapper dallEApiWrapper;
+    private DallEService dallEService;
 
-    @GetMapping("/generations")
-    public ApiResponse generations(@RequestParam(name = "prompts") String prompts){
-        String url = dallEApiWrapper.generations(prompts);
-        log.info("prompts={}, url={}", prompts, url);
-        return ApiResponse.ok(url);
+    @PostMapping("/handleMsgs")
+    public ApiResponse handleMsg(@RequestBody MsgParam param){
+        log.info("param={}", param);
+        dallEService.handleMsg(param);
+        return ApiResponse.ok();
     }
 
 

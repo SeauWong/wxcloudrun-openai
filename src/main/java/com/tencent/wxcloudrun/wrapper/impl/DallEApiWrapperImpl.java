@@ -1,8 +1,8 @@
-package com.tencent.wxcloudrun.service.impl;
+package com.tencent.wxcloudrun.wrapper.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.tencent.wxcloudrun.controller.CounterController;
-import com.tencent.wxcloudrun.service.DallEApiWrapper;
+import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -11,19 +11,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class DallEApiWrapperImpl implements DallEApiWrapper {
-
-    private static final Logger log = LoggerFactory.getLogger(CounterController .class);
 
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
 
@@ -39,7 +35,7 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
         httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + appKey);
 
         Map<String, String> params = new HashMap<>();
-        params.put("prompt", "an apple");
+        params.put("prompt", prompt);
         params.put("size", "512x512");
         params.put("response_format", "url");
         try {
