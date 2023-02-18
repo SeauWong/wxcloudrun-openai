@@ -7,6 +7,7 @@ import com.tencent.wxcloudrun.param.MsgParam;
 import com.tencent.wxcloudrun.service.DallEService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +23,9 @@ public class DallEController {
     private DallEService dallEService;
 
     @PostMapping("/handleMsgs")
-    public ApiResponse handleMsg(HttpServletRequest request, MsgParam param){
-        log.info("request={}", JSON.toJSONString(request, SerializerFeature.IgnoreErrorGetter));
+    public ApiResponse handleMsg(@RequestBody String body){
+        log.info("body={}", body);
+        MsgParam param = JSON.parseObject(body, MsgParam.class);
         log.info("param={}", param);
         dallEService.handleMsg(param);
         return ApiResponse.ok();
