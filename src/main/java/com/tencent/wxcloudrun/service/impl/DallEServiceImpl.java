@@ -4,12 +4,16 @@ import com.tencent.wxcloudrun.param.MsgParam;
 import com.tencent.wxcloudrun.service.DallEService;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
 import com.tencent.wxcloudrun.wrapper.WechatSendMsgWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Service
+@Slf4j
 public class DallEServiceImpl implements DallEService {
 
     @Resource
