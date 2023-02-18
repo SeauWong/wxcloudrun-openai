@@ -20,7 +20,7 @@ openai:
   app-key: ${OPENAI_APPKEY}
 
 cos:
-  secret-id: ${SECRET_ID}
-  secret-key: ${SECRET_KEY}
+  sid: ${SECRET_ID}
+  skey: ${SECRET_KEY}
   region: ${COS_REGION}
   bucket: ${COS_BUCKET}
