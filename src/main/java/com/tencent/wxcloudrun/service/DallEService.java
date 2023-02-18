@@ -4,5 +4,5 @@ import com.tencent.wxcloudrun.param.MsgParam;
 
 public interface DallEService {
 
-    void handleMsg(MsgParam param);
+    String handleMsg(MsgParam param);
 }
