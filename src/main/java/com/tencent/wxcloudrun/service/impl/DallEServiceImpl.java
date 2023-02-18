@@ -35,24 +35,30 @@ public class DallEServiceImpl implements DallEService {
 
         //已存在记录，且url存在
         Optional<CallRecord> rs = callRecordService.findByUserAndContent(param.getFromUserName(), param.getContent());
-        String url = rs.map(CallRecord::getExtInfo)
-                .map(CallRecordExt::getUrl)
-                .orElse(null);
-        if (StringUtils.isNotBlank(url)) {
-            return url;
+        if(rs.isPresent()){
+            CallRecordExt ext = rs.map(CallRecord::getExtInfo).orElse(new CallRecordExt());
+            if(Boolean.FALSE.equals(ext.getDallESuccess())){
+                return "处理失败, 请更换描述后重试";
+            }
+            String url = ext.getUrl();
+            if (StringUtils.isNotBlank(url)) {
+                return url;
+            }
         }
 
-        CallRecord callRecord = callRecordService.save(toCallRecord(param));
+
+        CallRecord callRecord = rs.orElseGet(() -> callRecordService.save(toCallRecord(param)));
 
         executorService.submit(() -> {
                     String picUrl = dallEApiWrapper.generations(param.getContent());
-                    picUrl = Optional.ofNullable(picUrl).orElse("系统繁忙, 请稍后重试");
-                    callRecord.getExtInfo().setUrl(picUrl);
+                    CallRecordExt extInfo = callRecord.getExtInfo();
+                    extInfo.setUrl(picUrl);
+                    extInfo.setDallESuccess(null != picUrl);
                     callRecordService.save(callRecord);
                 }
         );
 
-        return "已下发, 请稍后复制消息重新发送获取";
+        return "正在处理...10秒后重新发送获取";
     }
 
     private CallRecord toCallRecord(MsgParam param) {

@@ -33,6 +33,8 @@ public class DallEController {
             return null;
         }
 
+        param.setContent(param.getContent().replaceFirst("作画",""));
+
         try {
             String resMsg = dallEService.handleMsg(param);
             String rs = MsgConvertor.buildJson(param.getFromUserName(), param.getToUserName(), resMsg);
