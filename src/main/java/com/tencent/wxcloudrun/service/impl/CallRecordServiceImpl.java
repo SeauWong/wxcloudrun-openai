@@ -5,14 +5,16 @@ import com.tencent.wxcloudrun.model.CallRecord;
 import com.tencent.wxcloudrun.model.CallRecordDO;
 import com.tencent.wxcloudrun.service.CallRecordService;
 import com.tencent.wxcloudrun.service.convertor.CallRecordConvertor;
+import com.tencent.wxcloudrun.util.Md5Util;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
+import javax.xml.bind.DatatypeConverter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 @Service
@@ -36,9 +38,8 @@ public class CallRecordServiceImpl implements CallRecordService {
         if(StringUtils.isAnyBlank(fromUser, content)){
             return Optional.empty();
         }
-        String md5Crypt = Md5Crypt.md5Crypt(content.getBytes(StandardCharsets.UTF_8));
         CallRecordDO example = new CallRecordDO();
-        example.setContentMd5(md5Crypt);
+        example.setContentMd5(Md5Util.encode(content));
         example.setFromUser(fromUser);
         return callRecordRepository.findOne(Example.of(example))
                 .map(CallRecordConvertor::toDto);
@@ -52,6 +53,15 @@ public class CallRecordServiceImpl implements CallRecordService {
         CallRecordDO callRecordDO = callRecordRepository.save(CallRecordConvertor.toDO(callRecord));
         log.info("callRecordRepository.save.res={}", callRecordDO);
         return CallRecordConvertor.toDto(callRecordDO);
+    }
+
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update("123".getBytes());
+        byte[] digest = md.digest();
+        String myHash = DatatypeConverter
+                .printHexBinary(digest).toUpperCase();
+        System.out.println(myHash);
     }
 
 }

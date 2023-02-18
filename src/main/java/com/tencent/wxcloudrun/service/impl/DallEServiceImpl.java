@@ -5,15 +5,13 @@ import com.tencent.wxcloudrun.model.CallRecordExt;
 import com.tencent.wxcloudrun.param.MsgParam;
 import com.tencent.wxcloudrun.service.CallRecordService;
 import com.tencent.wxcloudrun.service.DallEService;
+import com.tencent.wxcloudrun.util.Md5Util;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
-import com.tencent.wxcloudrun.wrapper.WechatSendMsgWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,7 +58,7 @@ public class DallEServiceImpl implements DallEService {
         CallRecord callRecord = new CallRecord();
         callRecord.setBizType(DALLE);
         callRecord.setFromUser(param.getFromUserName());
-        callRecord.setContentMd5(Md5Crypt.md5Crypt(param.getContent().getBytes(StandardCharsets.UTF_8)));
+        callRecord.setContentMd5(Md5Util.encode(param.getContent()));
         CallRecordExt ext = new CallRecordExt();
         ext.setContent(param.getContent());
         callRecord.setExtInfo(ext);
