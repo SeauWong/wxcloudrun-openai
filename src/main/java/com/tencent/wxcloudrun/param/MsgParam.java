@@ -6,16 +6,16 @@ import lombok.Data;
 public class MsgParam {
 
 
-    private String toUserName;
+    private String ToUserName;
 
-    private String fromUserName;
+    private String FromUserName;
 
-    private Long createTime;
+    private Long CreateTime;
 
-    private String msgType;
+    private String MsgType;
 
-    private String content;
+    private String Content;
 
-    private long msgId;
+    private Long MsgId;
 
 }

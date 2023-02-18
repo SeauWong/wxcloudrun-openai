@@ -23,7 +23,7 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
 
     private static final String API_URL = "https://api.openai.com/v1/images/generations";
 
-    @Value("${openai.appKey}")
+    @Value("${openai.appKey:0}")
     private String appKey;
 
     @Override
