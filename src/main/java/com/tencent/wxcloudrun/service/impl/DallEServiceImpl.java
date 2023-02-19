@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,12 +54,21 @@ public class DallEServiceImpl implements DallEService {
             if (StringUtils.isNotBlank(url)) {
                 return url;
             }
+            Long createTimestamp = rs.map(CallRecord::getGmtCreated).map(Date::getTime).orElse(0L);
+            if(System.currentTimeMillis() - createTimestamp <= DallEConstants.HANDLE_TIMEOUT_S){
+                return "我在处理啦...请等等哦";
+            }
         }
 
 
         executorService.submit(() -> asyncHandle(param, rs));
 
-        return "正在处理...10秒后重新发送获取";
+        return "正在处理...15秒后重新发送获取";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Date().getTime());
+        System.out.println(System.currentTimeMillis());
     }
 
     private void asyncHandle(MsgParam param, Optional<CallRecord> rs) {

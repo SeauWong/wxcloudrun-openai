@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.service.impl;
 
+import com.tencent.wxcloudrun.constants.DallEConstants;
 import com.tencent.wxcloudrun.model.CallRecord;
 import com.tencent.wxcloudrun.model.CallRecordExt;
 import com.tencent.wxcloudrun.param.MsgParam;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -48,6 +50,10 @@ public class GptServiceImpl implements GptService {
             }
         }
 
+        Long createTimestamp = rs.map(CallRecord::getGmtCreated).map(Date::getTime).orElse(0L);
+        if(System.currentTimeMillis() - createTimestamp <= DallEConstants.HANDLE_TIMEOUT_S){
+            return "我在处理啦...请等等哦";
+        }
 
         executorService.submit(() -> asyncHandle(param, rs));
 
