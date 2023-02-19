@@ -6,7 +6,7 @@ import com.tencent.wxcloudrun.model.CallRecordExt;
 import com.tencent.wxcloudrun.param.MsgParam;
 import com.tencent.wxcloudrun.service.CallRecordService;
 import com.tencent.wxcloudrun.service.DallEService;
-import com.tencent.wxcloudrun.util.CosUtil;
+import com.tencent.wxcloudrun.wrapper.CosWrapper;
 import com.tencent.wxcloudrun.util.Md5Util;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
 import com.tencent.wxcloudrun.wrapper.model.Images;
@@ -30,7 +30,7 @@ public class DallEServiceImpl implements DallEService {
     @Resource
     private CallRecordService callRecordService;
     @Resource
-    private CosUtil cosUtil;
+    private CosWrapper cosWrapper;
 
     private static final ExecutorService executorService = new ThreadPoolExecutor(2, 4,
             0L, TimeUnit.MILLISECONDS,
@@ -67,10 +67,10 @@ public class DallEServiceImpl implements DallEService {
 
             Images images = dallEApiWrapper.generations(param.getContent(), DallEConstants.BASE64_FORMAT);
 
-            String key = cosUtil.upload(images.getB64Json());
+            String key = cosWrapper.upload(images.getB64Json());
 
             CallRecordExt extInfo = callRecord.getExtInfo();
-            extInfo.setUrl(cosUtil.getPicUrl(key));
+            extInfo.setUrl(cosWrapper.getPicUrl(key));
             extInfo.setDallESuccess(null != key);
             callRecordService.save(callRecord);
 

@@ -1,7 +1,8 @@
-package com.tencent.wxcloudrun.util;
+package com.tencent.wxcloudrun.wrapper.impl;
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.ObjectMetadata;
+import com.tencent.wxcloudrun.wrapper.CosWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class CosUtil {
+public class CosWrapperImpl implements CosWrapper {
 
     @Value("${cos.bucket:0}")
     private String bucket;
@@ -22,6 +23,7 @@ public class CosUtil {
     @Resource
     private COSClient cosClient;
 
+    @Override
     public String getPicUrl(String key){
         if(StringUtils.isBlank(key)){
             return null;
@@ -29,6 +31,7 @@ public class CosUtil {
         return String.format("https://%s.tcb.qcloud.la/%s", bucket, key);
     }
 
+    @Override
     public String upload(String base64Image) {
         if(StringUtils.isBlank(base64Image)){
             return null;
