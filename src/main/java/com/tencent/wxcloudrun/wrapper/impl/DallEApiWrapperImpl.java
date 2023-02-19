@@ -1,12 +1,9 @@
 package com.tencent.wxcloudrun.wrapper.impl;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson2.JSON;
-import com.tencent.wxcloudrun.constants.DallEConstants;
 import com.tencent.wxcloudrun.wrapper.DallEApiWrapper;
 import com.tencent.wxcloudrun.wrapper.model.Images;
 import com.tencent.wxcloudrun.wrapper.model.Response;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -20,10 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * 调用dalle接口
+ * https://platform.openai.com/docs/guides/images/generations
+ */
 @Service
 @Slf4j
 public class DallEApiWrapperImpl implements DallEApiWrapper {
@@ -55,7 +55,7 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
             return Optional.ofNullable(res)
                     .map(Response::getData)
                     .map(r -> r.get(0))
-                    .orElse(null);
+                    .orElse(new Images());
         } catch (Exception e) {
             log.error("DallEApiWrapperImpl_generations_fail", e);
             return new Images();

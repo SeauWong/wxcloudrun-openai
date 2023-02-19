@@ -30,7 +30,7 @@ public class GptServiceImpl implements GptService {
     @Resource
     private CallRecordService callRecordService;
 
-    private static final ExecutorService executorService = new ThreadPoolExecutor(2, 4,
+    private static final ExecutorService executorService = new ThreadPoolExecutor(8, 8,
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(1));
 

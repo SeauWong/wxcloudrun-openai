@@ -33,7 +33,7 @@ public class DallEServiceImpl implements DallEService {
     @Resource
     private CosWrapper cosWrapper;
 
-    private static final ExecutorService executorService = new ThreadPoolExecutor(2, 4,
+    private static final ExecutorService executorService = new ThreadPoolExecutor(8, 8,
             0L, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(1));
 
@@ -64,11 +64,6 @@ public class DallEServiceImpl implements DallEService {
         executorService.submit(() -> asyncHandle(param, rs));
 
         return "正在处理...15秒后重新发送获取";
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date().getTime());
-        System.out.println(System.currentTimeMillis());
     }
 
     private void asyncHandle(MsgParam param, Optional<CallRecord> rs) {
