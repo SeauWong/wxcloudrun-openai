@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 public class GptApiWrapperImpl implements GptApiWrapper {
 
-    @Value("${openai.gptkey}")
+    @Value("${gptkey}")
     private String gptkey;
 
     private static final String API_URL = "https://api.openai.com/v1/completions";
