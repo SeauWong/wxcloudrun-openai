@@ -22,8 +22,8 @@ import java.util.Map;
 @Slf4j
 public class GptApiWrapperImpl implements GptApiWrapper {
 
-    @Value("${gptkey}")
-    private String gptkey;
+    @Value("${openai.gptKey}")
+    private String gptKey;
 
     private static final String API_URL = "https://api.openai.com/v1/completions";
 
@@ -33,7 +33,7 @@ public class GptApiWrapperImpl implements GptApiWrapper {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(API_URL);
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
-        httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + gptkey);
+        httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + gptKey);
 
         Map<String, Object> params = new HashMap<>();
         params.put("model", "text-davinci-003");
