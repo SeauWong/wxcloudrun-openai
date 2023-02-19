@@ -58,7 +58,7 @@ public class DallEApiWrapperImpl implements DallEApiWrapper {
                     .orElse(null);
         } catch (Exception e) {
             log.error("DallEApiWrapperImpl_generations_fail", e);
-            return null;
+            return new Images();
         }
     }
 }

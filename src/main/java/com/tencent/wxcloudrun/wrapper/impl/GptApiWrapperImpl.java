@@ -34,6 +34,10 @@ public class GptApiWrapperImpl implements GptApiWrapper {
         HttpPost httpPost = new HttpPost(API_URL);
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
         httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + gptkey);
+        log.info("gptkey={}", gptkey);
+        log.info("system.getenv(GPT_KEY)={}", System.getenv("GPT_KEY"));
+        log.info("system.getenv={}", JSON.toJSONString(System.getenv()));
+
 
         Map<String, Object> params = new HashMap<>();
         params.put("model", "text-davinci-003");
@@ -60,5 +64,6 @@ public class GptApiWrapperImpl implements GptApiWrapper {
             Completions completions = service.completions("so happy");
             System.out.println(completions.getChoices().get(0).getText());
         }
+        System.out.println(System.getenv());
     }
 }

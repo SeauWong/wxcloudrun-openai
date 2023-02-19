@@ -34,7 +34,7 @@ public class DallEServiceImpl implements DallEService {
 
     private static final ExecutorService executorService = new ThreadPoolExecutor(2, 4,
             0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(1));
+            new LinkedBlockingQueue<>(1));
 
     private static final String DALLE = "DALLE";
 
