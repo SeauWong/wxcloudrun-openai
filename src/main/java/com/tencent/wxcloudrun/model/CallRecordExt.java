@@ -10,4 +10,6 @@ public class CallRecordExt {
     private String content;
 
     private Boolean dallESuccess;
+
+    private String gptContent;
 }

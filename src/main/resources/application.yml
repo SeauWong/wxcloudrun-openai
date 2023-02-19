@@ -18,6 +18,7 @@ mybatis:
 
 openai:
   app-key: ${OPENAI_APPKEY}
+  gpt-key: ${GPT_KEY}
 
 cos:
   sid: ${SECRET_ID}
